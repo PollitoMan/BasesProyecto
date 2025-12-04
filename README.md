@@ -42,4 +42,21 @@ python setup_databases.py
 python run.py
 ```
 
-La aplicación se abrirá en `http://localhost:5000`
+La aplicación se ejecutará en `0.0.0.0:5000` y se abrirá automáticamente en `http://localhost:5000`
+
+### Acceso desde tu PC local
+- `http://localhost:5000`
+- `http://127.0.0.1:5000`
+
+### Acceso desde otra PC en la red local
+- `http://<TU_IP_LOCAL>:5000`
+
+La IP local se mostrará en la consola cuando ejecutes `python run.py`
+
+### Acceso desde IP pública (Internet)
+Para acceder desde Internet, necesitas:
+1. Obtener tu IP pública
+2. Configurar port forwarding en tu router (puerto 5000)
+3. Acceder a través de `http://<TU_IP_PUBLICA>:5000`
+
+**Nota:** El acceso públicamente requiere configuración de seguridad adicional.

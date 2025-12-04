@@ -3,11 +3,22 @@ import os
 import webbrowser
 import threading
 import logging
+import socket
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def get_ip_address():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except:
+        return "127.0.0.1"
 
 def open_browser():
     threading.Timer(2.0, lambda: webbrowser.open('http://localhost:5000')).start()
@@ -20,11 +31,16 @@ if __name__ == '__main__':
     try:
         from app.app import app
         
+        local_ip = get_ip_address()
+        
         print("\n✓ Módulos importados correctamente")
         print("✓ Abriendo navegador en 2 segundos...")
         print("\nAccede a la aplicación en:")
-        print("  • http://localhost:5000")
-        print("  • http://127.0.0.1:5000")
+        print(f"  • http://localhost:5000")
+        print(f"  • http://127.0.0.1:5000")
+        print(f"  • http://{local_ip}:5000 (IP Local)")
+        print("\nPara acceder desde otra PC en la red:")
+        print(f"  • http://{local_ip}:5000")
         print("\nPara detener la aplicación, presiona Ctrl+C")
         print("=" * 60 + "\n")
         
