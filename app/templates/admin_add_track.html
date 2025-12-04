@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Cancion - Music Ratings{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Agregar Cancion</h1>
+        <p>Agrega una nueva cancion a un album</p>
+    </div>
+</section>
+
+<style>
+    /* Fix para que las opciones del select sean legibles */
+    select option {
+        background-color: white;
+        color: black;
+    }
+</style>
+
+<script>
+
+    const albumsData = {{ todos_albums|tojson|safe if todos_albums else '[]' }};
+    
+    const allAlbums = albumsData.map(album => ({
+        albumId: album.album_id,
+        title: album.album_title,
+        artistId: album.artist_id
+    }));
+    
+    function filterAlbums() {
+        const artistId = document.getElementById('artist_id').value;
+        const albumSelect = document.getElementById('album_id');
+
+        albumSelect.innerHTML = '<option value="">Selecciona un album</option>';
+
+        let matchCount = 0;
+        allAlbums.forEach(album => {
+
+            if (!artistId || String(album.artistId) === String(artistId)) {
+                const option = document.createElement('option');
+                option.value = album.albumId;
+                option.textContent = album.title;
+                albumSelect.appendChild(option);
+                matchCount++;
+            }
+        });
+
+        const preselectedAlbumId = '{{ album_id if album_id else "" }}';
+        if (preselectedAlbumId) {
+            albumSelect.value = preselectedAlbumId;
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+
+        filterAlbums();
+    });
+</script>
+
+<div class="container">
+    <div class="card" style="margin: 2rem auto; max-width: 500px;">
+        {% if albumes %}
+        <div style="background: var(--spotify-dark-gray); padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem;">
+            <p style="margin: 0; color: var(--spotify-light-gray); font-size: 0.9rem;">Album preseleccionado:</p>
+            <h3 style="margin: 0.5rem 0 0 0;">{{ albumes.album_title }}</h3>
+            <p style="margin: 0.25rem 0 0 0; color: var(--spotify-light-gray);">{{ albumes.artist_name }}</p>
+        </div>
+        {% endif %}
+        
+        <form method="POST">
+            <div style="margin-bottom: 1.5rem;">
+                <label for="artist_id" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">
+                    Artista *
+                </label>
+                <select id="artist_id" name="artist_id" required onchange="filterAlbums()"
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+                    <option value="">Selecciona un artista</option>
+                    {% for artist in artistas %}
+                    <option value="{{ artist.artist_id }}">{{ artist.artist_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="album_id" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">
+                    Album
+                </label>
+                <select id="album_id" name="album_id"
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+                    <option value="">Sin album (cancion independiente)</option>
+                </select>
+                <small style="color: var(--spotify-light-gray); display: block; margin-top: 0.25rem; font-size: 0.85rem;">
+                    Opcional
+                </small>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="track_title" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">
+                    Nombre de la Cancion *
+                </label>
+                <input type="text" id="track_title" name="track_title" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="track_number" style="display: block; margin-bottom: 0.5rem;">
+                    Numero de Pista
+                </label>
+                <input type="number" id="track_number" name="track_number" min="1"
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+                <small style="color: var(--spotify-light-gray); display: block; margin-top: 0.25rem; font-size: 0.85rem;">
+                    Opcional (Se agregara al final del albumes)
+                </small>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="duration_seconds" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">
+                    Duracion (segundos) *
+                </label>
+                <input type="number" id="duration_seconds" name="duration_seconds" min="1" required
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                Crear Cancion
+            </button>
+        </form>
+        
+        <a href="{{ url_for('admin_panel') }}" style="display: inline-block; margin-top: 1rem; color: var(--spotify-light-gray);">
+            ← Volver al panel
+        </a>
+    </div>
+</div>
+{% endblock %}
+

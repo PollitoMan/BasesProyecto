@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Artista - Music Ratings{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Agregar Artista</h1>
+        <p>Crea un nuevo artista en la base de datos</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="card" style="margin: 2rem auto; max-width: 500px;">
+        <form method="POST">
+            <div style="margin-bottom: 1.5rem;">
+                <label for="artist_name" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">
+                    Nombre del Artista *
+                </label>
+                <input type="text" id="artist_name" name="artist_name" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="country" style="display: block; margin-bottom: 0.5rem;">
+                    Pais
+                </label>
+                <input type="text" id="country" name="country" 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="genre" style="display: block; margin-bottom: 0.5rem;">
+                    Genero
+                </label>
+                <input type="text" id="genre" name="genre" 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="bio" style="display: block; margin-bottom: 0.5rem;">
+                    Biografia
+                </label>
+                <textarea id="bio" name="bio" rows="4"
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;"></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                Crear Artista
+            </button>
+        </form>
+        
+        <a href="{{ url_for('admin_panel') }}" style="display: inline-block; margin-top: 1rem; color: var(--spotify-light-gray);">
+            ← Volver al panel
+        </a>
+    </div>
+</div>
+{% endblock %}

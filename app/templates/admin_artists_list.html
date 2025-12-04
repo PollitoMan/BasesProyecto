@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Artistas{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Gestionar Artistas</h1>
+        <p>Lista de artistas registrados</p>
+    </div>
+</section>
+
+<div class="container section-header">
+    <div class="section-title-block">
+        <h2>Artistas</h2>
+    </div>
+    <form class="filter-form" action="{{ url_for('admin_artists_list') }}" method="get">
+        <label>
+            Buscar
+            <input type="text" name="search" placeholder="Nombre del artista" value="{{ search or '' }}">
+        </label>
+        <label>
+            Ordenar por
+            <select name="order">
+                <option value="rating" {% if order == 'rating' %}selected{% endif %}>Rating</option>
+                <option value="alfabetico" {% if order == 'alfabetico' %}selected{% endif %}>Alfabetico</option>
+            </select>
+        </label>
+        <label>
+            Direccion
+            <select name="direction">
+                <option value="desc" {% if direction == 'desc' %}selected{% endif %}>Descendente</option>
+                <option value="asc" {% if direction == 'asc' %}selected{% endif %}>Ascendente</option>
+            </select>
+        </label>
+        <button class="btn btn-primary" type="submit">Aplicar filtros</button>
+    </form>
+</div>
+
+<div class="container">
+    {% if artistas %}
+    <div class="card">
+        <div class="table-scroll">
+            <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; color: var(--spotify-light-gray); border-bottom: 1px solid var(--spotify-dark-gray);">
+                    <th style="padding: 0.5rem;">#</th>
+                    <th style="padding: 0.5rem;">Artista</th>
+                    <th style="padding: 0.5rem;">Pais</th>
+                    <th style="padding: 0.5rem;">Genero</th>
+                    <th style="padding: 0.5rem; text-align: center;">Albumes</th>
+                    <th style="padding: 0.5rem; text-align: center;">Canciones</th>
+                    <th style="padding: 0.5rem; text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for artist in artistas %}
+                <tr class="fade-in" style="border-bottom: 1px solid var(--spotify-dark-gray);">
+                    <td style="padding: 0.5rem;">{{ loop.index }}</td>
+                    <td style="padding: 0.5rem;">{{ artist.artist_name }}</td>
+                    <td style="padding: 0.5rem;">{{ artist.country or '-' }}</td>
+                    <td style="padding: 0.5rem;">{{ artist.genre or '-' }}</td>
+                    <td style="padding: 0.5rem; text-align: center;">{{ artist.album_count }}</td>
+                    <td style="padding: 0.5rem; text-align: center;">{{ artist.track_count }}</td>
+                    <td style="padding: 0.5rem; text-align: center;">
+                        <a href="{{ url_for('edit_artist', artist_id=artist.artist_id) }}" class="btn btn-sm btn-success" style="color: white;">Editar</a>
+                        <form method="POST" action="{{ url_for('delete_artist', artist_id=artist.artist_id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-sm" style="background-color: white; color: black; border: 1px solid #ccc;" onclick="return confirm('¿Estas seguro?');">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center" style="padding: 3rem;">
+        <h3>No hay artistas disponibles</h3>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar "{{ search }}" - Music Ratings FN{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Resultados para "{{ search }}"</h1>
+        <p>Mostrando resultados que coinciden con tu busqueda.</p>
+    </div>
+</section>
+
+<div class="container-wide">
+    
+    <section style="margin-bottom: 3rem;">
+        <div class="section-header">
+            <div class="section-title-block">
+                <h2>Canciones</h2>
+            </div>
+            <form class="filter-form" method="get">
+                <input type="hidden" name="search" value="{{ search }}">
+                <input type="hidden" name="album_order" value="{{ album_order }}">
+                <input type="hidden" name="album_dir" value="{{ album_dir }}">
+                <input type="hidden" name="artist_order" value="{{ artist_order }}">
+                <input type="hidden" name="artist_dir" value="{{ artist_dir }}">
+                <label>
+                    Ordenar por
+                    <select name="track_order">
+                        <option value="rating" {% if track_order == 'rating' %}selected{% endif %}>Rating</option>
+                        <option value="alfabetico" {% if track_order == 'alfabetico' %}selected{% endif %}>Alfabetico</option>
+                        <option value="artista" {% if track_order == 'artista' %}selected{% endif %}>Artista</option>
+                    </select>
+                </label>
+                <label>
+                    Direccion
+                    <select name="track_dir">
+                        <option value="desc" {% if track_dir == 'desc' %}selected{% endif %}>Descendente</option>
+                        <option value="asc" {% if track_dir == 'asc' %}selected{% endif %}>Ascendente</option>
+                    </select>
+                </label>
+                <button class="btn btn-secondary" type="submit">Aplicar</button>
+            </form>
+        </div>
+        {% if canciones %}
+        <div class="card">
+            <div class="table-scroll">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; color: var(--spotify-light-gray); border-bottom: 1px solid var(--spotify-dark-gray);">
+                        <th style="padding: 0.5rem;">Cancion</th>
+                        <th style="padding: 0.5rem;">Artista</th>
+                        <th style="padding: 0.5rem;">Album</th>
+                        <th style="padding: 0.5rem; text-align: center;">Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cancion in canciones %}
+                    <tr class="fade-in" style="border-bottom: 1px solid var(--spotify-dark-gray);">
+                        <td style="padding: 0.5rem;">
+                            <a href="{{ url_for('track_detail', track_id=cancion.track_id) }}">{{ cancion.track_title }}</a>
+                        </td>
+                        <td style="padding: 0.5rem;">
+                            {% if cancion.artist_id and cancion.artist_name %}
+                            <a href="{{ url_for('artist_detail', artist_id=cancion.artist_id) }}">{{ cancion.artist_name }}</a>
+                            {% else %}
+                            <span style="color: var(--spotify-light-gray);">-</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 0.5rem;">
+                            {% if cancion.album_id and cancion.album_title %}
+                            <a href="{{ url_for('album_detail', album_id=cancion.album_id) }}">{{ cancion.album_title }}</a>
+                            {% else %}
+                            <span style="color: var(--spotify-light-gray);">-</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 0.5rem; text-align: center;">
+                            <span class="stars">
+                                {% set rating = (cancion.avg_rating or 0) | round | int %}
+                                {% for i in range(rating) %}★{% endfor %}
+                                {% for i in range(5 - rating) %}☆{% endfor %}
+                            </span>
+                            <span style="color: var(--spotify-light-gray); font-size: 0.85rem;">
+                                {{ "%.1f" | format(cancion.avg_rating or 0.0) }} ({{ cancion.rating_count or 0 }} votos)
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        {% else %}
+        <p style="color: var(--spotify-light-gray);">No se encontraron canciones.</p>
+        {% endif %}
+    </section>
+
+    
+    <section style="margin-bottom: 3rem;">
+        <div class="section-header">
+            <div class="section-title-block">
+                <h2>Albumes</h2>
+            </div>
+            <form class="filter-form" method="get">
+                <input type="hidden" name="search" value="{{ search }}">
+                <input type="hidden" name="track_order" value="{{ track_order }}">
+                <input type="hidden" name="track_dir" value="{{ track_dir }}">
+                <input type="hidden" name="artist_order" value="{{ artist_order }}">
+                <input type="hidden" name="artist_dir" value="{{ artist_dir }}">
+                <label>
+                    Ordenar por
+                    <select name="album_order">
+                        <option value="rating" {% if album_order == 'rating' %}selected{% endif %}>Rating</option>
+                        <option value="alfabetico" {% if album_order == 'alfabetico' %}selected{% endif %}>Alfabetico</option>
+                        <option value="fecha" {% if album_order == 'fecha' %}selected{% endif %}>Fecha</option>
+                    </select>
+                </label>
+                <label>
+                    Direccion
+                    <select name="album_dir">
+                        <option value="desc" {% if album_dir == 'desc' %}selected{% endif %}>Descendente</option>
+                        <option value="asc" {% if album_dir == 'asc' %}selected{% endif %}>Ascendente</option>
+                    </select>
+                </label>
+                <button class="btn btn-secondary" type="submit">Aplicar</button>
+            </form>
+        </div>
+        {% if albumes %}
+        <div class="card">
+            <div class="table-scroll">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; color: var(--spotify-light-gray); border-bottom: 1px solid var(--spotify-dark-gray);">
+                        <th style="padding: 0.5rem;">Album</th>
+                        <th style="padding: 0.5rem;">Artista</th>
+                        <th style="padding: 0.5rem;">Genero</th>
+                        <th style="padding: 0.5rem; text-align: center;">Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for album in albumes %}
+                    <tr class="fade-in" style="border-bottom: 1px solid var(--spotify-dark-gray);">
+                        <td style="padding: 0.5rem;">
+                            <a href="{{ url_for('album_detail', album_id=album.album_id) }}">{{ album.album_title }}</a>
+                        </td>
+                        <td style="padding: 0.5rem;">{{ album.artist_name }}</td>
+                        <td style="padding: 0.5rem;">{{ album.genre or '-' }}</td>
+                        <td style="padding: 0.5rem; text-align: center;">
+                            <span class="stars">
+                                {% set rating = (album.avg_rating or 0) | round | int %}
+                                {% for i in range(rating) %}★{% endfor %}
+                                {% for i in range(5 - rating) %}☆{% endfor %}
+                            </span>
+                            <span style="color: var(--spotify-light-gray); font-size: 0.85rem;">
+                                {{ "%.1f" | format(album.avg_rating or 0.0) }} ({{ album.rating_count or 0 }} ratings)
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        {% else %}
+        <p style="color: var(--spotify-light-gray);">No se encontraron albumes.</p>
+        {% endif %}
+    </section>
+
+    
+    <section>
+        <div class="section-header">
+            <div class="section-title-block">
+                <h2>Artistas</h2>
+            </div>
+            <form class="filter-form" method="get">
+                <input type="hidden" name="search" value="{{ search }}">
+                <input type="hidden" name="track_order" value="{{ track_order }}">
+                <input type="hidden" name="track_dir" value="{{ track_dir }}">
+                <input type="hidden" name="album_order" value="{{ album_order }}">
+                <input type="hidden" name="album_dir" value="{{ album_dir }}">
+                <label>
+                    Ordenar por
+                    <select name="artist_order">
+                        <option value="rating" {% if artist_order == 'rating' %}selected{% endif %}>Rating</option>
+                        <option value="alfabetico" {% if artist_order == 'alfabetico' %}selected{% endif %}>Alfabetico</option>
+                    </select>
+                </label>
+                <label>
+                    Direccion
+                    <select name="artist_dir">
+                        <option value="desc" {% if artist_dir == 'desc' %}selected{% endif %}>Descendente</option>
+                        <option value="asc" {% if artist_dir == 'asc' %}selected{% endif %}>Ascendente</option>
+                    </select>
+                </label>
+                <button class="btn btn-secondary" type="submit">Aplicar</button>
+            </form>
+        </div>
+        {% if artistas %}
+        <div class="card">
+            <div class="table-scroll">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; color: var(--spotify-light-gray); border-bottom: 1px solid var(--spotify-dark-gray);">
+                        <th style="padding: 0.5rem;">Artista</th>
+                        <th style="padding: 0.5rem;">Pais</th>
+                        <th style="padding: 0.5rem;">Genero</th>
+                        <th style="padding: 0.5rem; text-align: center;">Albumes</th>
+                        <th style="padding: 0.5rem; text-align: center;">Canciones</th>
+                        <th style="padding: 0.5rem; text-align: center;">Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for artist in artistas %}
+                    <tr class="fade-in" style="border-bottom: 1px solid var(--spotify-dark-gray);">
+                        <td style="padding: 0.5rem;">
+                            <a href="{{ url_for('artist_detail', artist_id=artist.artist_id) }}">{{ artist.artist_name }}</a>
+                        </td>
+                        <td style="padding: 0.5rem;">{{ artist.country or '-' }}</td>
+                        <td style="padding: 0.5rem;">{{ artist.genre or '-' }}</td>
+                        <td style="padding: 0.5rem; text-align: center;">{{ artist.album_count or 0 }}</td>
+                        <td style="padding: 0.5rem; text-align: center;">{{ artist.track_count or 0 }}</td>
+                        <td style="padding: 0.5rem; text-align: center;">
+                            <span class="stars">
+                                {% set rating_round = (artist.avg_rating or 0) | round | int %}
+                                {% for i in range(rating_round) %}★{% endfor %}
+                                {% for i in range(5 - rating_round) %}☆{% endfor %}
+                            </span>
+                            <span style="color: var(--spotify-light-gray); font-size: 0.85rem;">
+                                {{ "%.1f" | format(artist.avg_rating or 0.0) }} ({{ artist.rating_count or 0 }} votos)
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        {% else %}
+        <p style="color: var(--spotify-light-gray);">No se encontraron artistas.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
+
+

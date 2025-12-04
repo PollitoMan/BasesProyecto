@@ -1,0 +1,861 @@
+/* 
+ * Music & Album Review Platform - Spotify-Themed Styles
+ * Color Scheme: Spotify Green (#1DB954) and Dark Theme
+ */
+
+/* ============================================
+   VARIABLES & RESET
+   ============================================ */
+
+:root {
+    
+    --spotify-green: #1DB954;
+    --spotify-green-dark: #1AA34A;
+    --spotify-black: #191414;
+    --spotify-dark-gray: #282828;
+    --spotify-gray: #535353;
+    --spotify-light-gray: #B3B3B3;
+    --spotify-white: #FFFFFF;
+    
+    
+    --error-red: #E22134;
+    --warning-yellow: #FFA500;
+    --success-green: #1DB954;
+    
+    
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    
+    
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--spotify-black);
+    color: var(--spotify-white);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+a {
+    color: var(--spotify-white);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--spotify-green);
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.container-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.navbar {
+    background-color: var(--spotify-black);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--spotify-dark-gray);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--spotify-green);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.navbar-brand:hover {
+    color: var(--spotify-green-dark);
+}
+
+.navbar-menu {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    list-style: none;
+    flex: 1;
+    justify-content: center;
+}
+
+.navbar-menu a {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+}
+
+.navbar-menu a:hover {
+    background-color: var(--spotify-dark-gray);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--spotify-dark-gray);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    max-width: 400px;
+    flex: 1;
+}
+
+.search-bar input {
+    background: none;
+    border: none;
+    color: var(--spotify-white);
+    outline: none;
+    width: 100%;
+    padding: var(--spacing-xs);
+}
+
+.search-bar input::placeholder {
+    color: var(--spotify-light-gray);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: var(--spotify-green);
+    color: var(--spotify-black);
+}
+
+.btn-primary:hover {
+    background-color: var(--spotify-green-dark);
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: var(--spotify-dark-gray);
+    color: var(--spotify-white);
+}
+
+.btn-secondary:hover {
+    background-color: var(--spotify-gray);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--spotify-green);
+    color: var(--spotify-green);
+}
+
+.btn-outline:hover {
+    background-color: var(--spotify-green);
+    color: var(--spotify-black);
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+
+.card {
+    background-color: var(--spotify-dark-gray);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.card:hover {
+    
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    align-items: start;
+}
+
+.album-card {
+    background-color: var(--spotify-dark-gray);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: var(--spotify-white);
+}
+
+.album-card:hover {
+    
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(29, 185, 84, 0.2);
+}
+
+.album-cover {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+    background-color: var(--spotify-gray);
+}
+
+.album-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.album-card .album-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    whitespace: nowrap; 
+}
+
+.album-card .album-rating span,
+.album-card .album-rating .stars {
+    display: inline-block;
+}
+
+
+.album-card .album-rating {
+    font-size: 0.9rem;
+    gap: 0.35rem;
+}
+
+.album-card .album-rating .stars {
+    font-size: 1rem; 
+}
+
+.album-card .album-rating .album-rating-text {
+    font-size: 0.85rem;
+    color: var(--spotify-light-gray);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.album-artist {
+    font-size: 0.875rem;
+    color: var(--spotify-light-gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+    font-size: 0.875rem;
+}
+
+.stars {
+    color: var(--spotify-green);
+}
+
+.album-rating-summary {
+    border: 1px solid var(--spotify-dark-gray);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: var(--spacing-sm);
+}
+
+.album-rating-meta {
+    color: var(--spotify-light-gray);
+    font-size: 0.85rem;
+}
+
+.album-user-rating {
+    margin-top: 0.25rem;
+    color: var(--spotify-green);
+    font-weight: 600;
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    color: var(--spotify-light-gray);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: var(--spacing-sm);
+    background-color: var(--spotify-dark-gray);
+    border: 2px solid var(--spotify-gray);
+    border-radius: var(--radius-md);
+    color: var(--spotify-white);
+    font-size: 1rem;
+    transition: border-color var(--transition-fast);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--spotify-green);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ============================================
+   REVIEWS
+   ============================================ */
+
+.review-card {
+    background-color: var(--spotify-dark-gray);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.review-author {
+    font-weight: 600;
+}
+
+.review-date {
+    font-size: 0.875rem;
+    color: var(--spotify-light-gray);
+}
+
+.review-rating {
+    color: var(--spotify-green);
+    font-size: 1.25rem;
+}
+
+.review-text {
+    color: var(--spotify-light-gray);
+    line-height: 1.6;
+}
+
+/* ============================================
+   TRACK LIST
+   ============================================ */
+
+.track-list {
+    list-style: none;
+}
+
+.track-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
+}
+
+.track-item:hover {
+    background-color: var(--spotify-dark-gray);
+}
+
+.track-core {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    cursor: pointer;
+    gap: var(--spacing-sm);
+}
+
+.track-number {
+    width: 30px;
+    color: var(--spotify-light-gray);
+    font-size: 0.875rem;
+}
+
+.track-title {
+    flex: 1;
+}
+
+.track-duration {
+    color: var(--spotify-light-gray);
+    font-size: 0.875rem;
+}
+
+.track-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-xs);
+}
+
+.track-avg-rating small {
+    color: var(--spotify-light-gray);
+    font-size: 0.75rem;
+}
+
+.track-user-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--spotify-light-gray);
+}
+
+.track-rating-input {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.track-rate-star {
+    background: none;
+    border: none;
+    color: var(--spotify-gray);
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.track-rate-star:hover,
+.track-rate-star.active {
+    color: var(--spotify-green);
+    transform: scale(1.15);
+    text-shadow: 0 4px 10px rgba(29,185,84,0.4);
+}
+
+
+
+/* ============================================
+   ALERTS & MESSAGES
+   ============================================ */
+
+.alert {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.alert-success {
+    background-color: rgba(29, 185, 84, 0.2);
+    border-left: 4px solid var(--success-green);
+}
+
+.alert-error {
+    background-color: rgba(226, 33, 52, 0.2);
+    border-left: 4px solid var(--error-red);
+}
+
+.alert-warning {
+    background-color: rgba(255, 165, 0, 0.2);
+    border-left: 4px solid var(--warning-yellow);
+}
+
+.alert-info {
+    background-color: rgba(29, 185, 84, 0.1);
+    border-left: 4px solid var(--spotify-green);
+}
+
+/* ============================================
+   RATING STARS
+   ============================================ */
+
+.rating-input {
+    display: flex;
+    gap: var(--spacing-xs);
+    font-size: 2rem;
+}
+
+.rating-input input {
+    display: none;
+}
+
+.rating-input label {
+    cursor: pointer;
+    color: var(--spotify-gray);
+    transition: color var(--transition-fast);
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label,
+.rating-input input:checked ~ label {
+    color: var(--spotify-green);
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+.hero {
+    background: linear-gradient(135deg, var(--spotify-dark-gray) 0%, var(--spotify-black) 100%);
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+    background: linear-gradient(135deg, var(--spotify-green) 0%, var(--spotify-white) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: var(--spotify-light-gray);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.stat-card {
+    background-color: var(--spotify-dark-gray);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--spotify-green);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--spotify-light-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+    background-color: var(--spotify-black);
+    border-top: 1px solid var(--spotify-dark-gray);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    color: var(--spotify-light-gray);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .album-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: var(--spacing-sm);
+    }
+    
+    .track-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .track-meta {
+        align-items: flex-start;
+    }
+    
+    .navbar-content {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .search-bar {
+        max-width: 100%;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+}
+
+/* ============================================
+   SCROLLABLE TABLES
+   ============================================ */
+.table-scroll {
+    max-height: 60vh; 
+    overflow: auto;
+    border-radius: var(--radius-sm);
+}
+
+.table-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-scroll thead th {
+    position: sticky;
+    top: 0;
+    background: var(--spotify-dark-gray);
+    z-index: 5;
+}
+
+.table-scroll tbody tr:hover {
+    background-color: rgba(255,255,255,0.02);
+}
+
+
+.table-scroll::-webkit-scrollbar {
+    width: 10px;
+}
+.table-scroll::-webkit-scrollbar-thumb {
+    background: rgba(29,185,84,0.15);
+    border-radius: 10px;
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+
+.flex { display: flex; }
+.flex-center { display: flex; justify-content: center; align-items: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+.hidden { display: none; }
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.section-header .section-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1 1 240px;
+}
+
+.filter-form {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-form input[type="text"],
+.filter-form select {
+    padding: var(--spacing-xs);
+    background-color: var(--spotify-dark-gray);
+    border: 1px solid var(--spotify-gray);
+    border-radius: var(--radius-md);
+    color: var(--spotify-white);
+}
+
+.filter-form button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.section-subtitle {
+    color: var(--spotify-light-gray);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn var(--transition-normal) ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* ============================================
+   REVIEW CARDS
+   ============================================ */
+
+.reseñas-card {
+    background: linear-gradient(135deg, var(--spotify-dark-gray) 0%, rgba(40, 40, 40, 0.6) 100%);
+    border-left: 4px solid var(--spotify-green);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    transition: all var(--transition-normal);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.reseñas-card:hover {
+    transform: translateX(8px);
+    box-shadow: 0 4px 16px rgba(29, 185, 84, 0.2);
+    border-left-color: var(--spotify-green-dark);
+}
+
+.reseñas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.reseñas-author {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--spotify-white);
+    margin-bottom: 0.25rem;
+}
+
+.reseñas-date {
+    font-size: 0.875rem;
+    color: var(--spotify-light-gray);
+}
+
+.reseñas-rating {
+    color: var(--spotify-green);
+    font-size: 1.25rem;
+    letter-spacing: 2px;
+}
+
+.reseñas-text {
+    color: var(--spotify-white);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    padding: var(--spacing-sm);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-sm);
+    margin-top: var(--spacing-sm);
+}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Mejores Artistas - Music Ratings FN{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>🏆 Mejores Artistas</h1>
+        <p>Los mas populares y mejor valorados por los usuarios.</p>
+    </div>
+</section>
+
+<div class="container section-header">
+    <div class="section-title-block">
+        <h2>Artistas</h2>
+    </div>
+    <form class="filter-form" action="{{ url_for('search_artists_page') }}" method="get">
+        <label>
+            Buscar
+            <input type="text" name="search" placeholder="Nombre del artista">
+        </label>
+        <label>
+            Ordenar por
+            <select name="order">
+                <option value="rating">Rating</option>
+                <option value="alfabetico">Alfabetico</option>
+            </select>
+        </label>
+        <label>
+            Direccion
+            <select name="direction">
+                <option value="desc">Descendente</option>
+                <option value="asc">Ascendente</option>
+            </select>
+        </label>
+        <button class="btn btn-primary" type="submit">Ir al buscador</button>
+    </form>
+</div>
+
+<div class="container">
+    {% if artistas %}
+    <div class="card">
+        <div class="table-scroll">
+            <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; color: var(--spotify-light-gray); border-bottom: 1px solid var(--spotify-dark-gray);">
+                    <th style="padding: 0.5rem;">#</th>
+                    <th style="padding: 0.5rem;">Artista</th>
+                    <th style="padding: 0.5rem;">Pais</th>
+                    <th style="padding: 0.5rem;">Genero</th>
+                    <th style="padding: 0.5rem; text-align: center;">Albumes</th>
+                    <th style="padding: 0.5rem; text-align: center;">Canciones</th>
+                    <th style="padding: 0.5rem; text-align: center;">Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for artist in artistas %}
+                <tr class="fade-in" style="border-bottom: 1px solid var(--spotify-dark-gray);">
+                    <td style="padding: 0.5rem;">{{ loop.index }}</td>
+                    <td style="padding: 0.5rem;">
+                        <a href="{{ url_for('artist_detail', artist_id=artist.artist_id) }}">
+                            {{ artist.artist_name }}
+                        </a>
+                    </td>
+                    <td style="padding: 0.5rem;">{{ artist.country or '-' }}</td>
+                    <td style="padding: 0.5rem;">{{ artist.genre or '-' }}</td>
+                    <td style="padding: 0.5rem; text-align: center;">{{ artist.album_count }}</td>
+                    <td style="padding: 0.5rem; text-align: center;">{{ artist.track_count }}</td>
+                    <td style="padding: 0.5rem; text-align: center;">
+                            <span class="stars">
+                                {% set rating_round = (artist.avg_rating or 0) | round | int %}
+                                {% for i in range(rating_round) %}★{% endfor %}
+                                {% for i in range(5 - rating_round) %}☆{% endfor %}
+                            </span>
+                            <span style="color: var(--spotify-light-gray); font-size: 0.85rem;">
+                                {{ "%.1f" | format(artist.avg_rating or 0.0) }} ({{ artist.rating_count or 0 }} votos)
+                            </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center" style="padding: 3rem;">
+        <h3>No hay artistas con canciones valoradas todavia</h3>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+

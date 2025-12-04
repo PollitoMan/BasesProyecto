@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}{{ canciones.track_title }} - Music Ratings FN{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 2rem;">
+    <div style="margin-bottom: 2rem;">
+        <a href="{{ url_for('album_detail', album_id=canciones.album_id) }}" class="btn btn-secondary mb-2">← Volver al album</a>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+        <h1>{{ canciones.track_title }}</h1>
+        <h3 style="color: var(--spotify-green); margin-bottom: 0.5rem;">
+            {% if canciones.artist_id and canciones.artist_name %}
+            <a href="{{ url_for('artist_detail', artist_id=canciones.artist_id) }}">{{ canciones.artist_name }}</a>
+            {% else %}
+            <span>-</span>
+            {% endif %}
+        </h3>
+        <p style="color: var(--spotify-light-gray); margin-bottom: 1rem;">
+            Del album
+            {% if canciones.album_id and canciones.album_title %}
+            <a href="{{ url_for('album_detail', album_id=canciones.album_id) }}">{{ canciones.album_title }}</a>
+            {% else %}
+            <span>-</span>
+            {% endif %}
+        </p>
+
+        <div style="display: flex; gap: 2rem; align-items: center;">
+            <div>
+                <div class="stars" style="font-size: 1.6rem;">
+                    {% set rating = (canciones.avg_rating or 0) | round | int %}
+                    {% for i in range(rating) %}★{% endfor %}
+                    {% for i in range(5 - rating) %}☆{% endfor %}
+                </div>
+                <div>
+                    <strong>{{ "%.1f" | format(canciones.avg_rating or 0.0) }}</strong> / 5
+                    <span style="color: var(--spotify-light-gray); font-size: 0.9rem;">
+                        ({{ canciones.rating_count or 0 }} votos)
+                    </span>
+                </div>
+            </div>
+
+            {% if canciones.duration_seconds %}
+            <div style="color: var(--spotify-light-gray);">
+                Duracion:
+                {{ (canciones.duration_seconds // 60) }}:{{ "%02d" | format(canciones.duration_seconds % 60) }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if session.get('user_id') %}
+    <div class="card">
+        <h2 style="margin-bottom: 1rem;">Tu rating para esta cancion</h2>
+        <p style="color: var(--spotify-light-gray); margin-bottom: 0.5rem;">
+            Haz clic en una estrella para guardar tu calificacion.
+        </p>
+
+        <div class="track-user-rating" data-track-id="{{ canciones.track_id }}" data-album-id="{{ canciones.album_id }}">
+                <div class="track-rating-input">
+                    {% for value in range(1, 6) %}
+                    <button type="button"
+                        class="track-rate-star {% if canciones.user_rating and canciones.user_rating >= value %}active{% endif %}"
+                        data-value="{{ value }}">
+                        ★
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <p style="color: var(--spotify-light-gray);">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Inicia sesion</a>&nbsp;&nbsp;&nbsp;&nbsp;para dejar tu rating en esta cancion.
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.track-rate-star').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                const rating = parseInt(this.getAttribute('data-value'));
+                const container = this.closest('.track-user-rating');
+                const trackId = parseInt(container.getAttribute('data-track-id'));
+                const albumId = parseInt(container.getAttribute('data-album-id'));
+                
+                setTrackRating(trackId, albumId, rating);
+            });
+        });
+    });
+
+    function setTrackRating(trackId, albumId, rating) {
+        fetch('/api/track-rating', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                track_id: trackId,
+                rating: rating
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                location.reload();
+            })
+            .catch(error => {
+
+                location.reload();
+            });
+    }
+
+    function highlightTrackStars(trackId, rating) {
+        const container = document.querySelector(`.track-user-rating[data-track-id="${trackId}"]`);
+        if (!container) return;
+        const buttons = container.querySelectorAll('.track-rate-star');
+        buttons.forEach((btn, index) => {
+            if (index < rating) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+</script>
+{% endblock %}
+
+

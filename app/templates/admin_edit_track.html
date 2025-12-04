@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Cancion{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Editar Cancion</h1>
+        <p>Modifica los detalles de la cancion</p>
+    </div>
+</section>
+
+<style>
+    /* Fix para que las opciones del select sean legibles */
+    select option {
+        background-color: white;
+        color: black;
+    }
+</style>
+
+<script>
+
+    const allAlbums = [
+        {% for album in albumes %}
+        { id: {{ album.album_id }}, title: "{{ album.album_title }}", artistId: {{ album.artist_id }} }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const artistSelect = document.getElementById('artist_id');
+        const albumSelect = document.getElementById('album_id');
+        const currentAlbumId = {{ canciones.album_id or 'null' }};
+
+        function filterAlbums() {
+            const selectedArtistId = parseInt(artistSelect.value);
+
+            albumSelect.innerHTML = '<option value="">Sin Album</option>';
+            
+            if (selectedArtistId) {
+
+                const filteredAlbums = allAlbums.filter(album => album.artistId === selectedArtistId);
+                
+                filteredAlbums.forEach(album => {
+                    const option = document.createElement('option');
+                    option.value = album.id;
+                    option.textContent = album.title;
+                    if (album.id === currentAlbumId) {
+                        option.selected = true;
+                    }
+                    albumSelect.appendChild(option);
+                });
+            }
+        }
+
+        filterAlbums();
+
+        artistSelect.addEventListener('change', filterAlbums);
+    });
+</script>
+
+<div class="container">
+    <div class="card" style="margin: 2rem auto; max-width: 500px;">
+        <form method="POST">
+            <div style="margin-bottom: 1.5rem;">
+                <label for="artist_id" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">
+                    Artista *
+                </label>
+                <select id="artist_id" name="artist_id" required
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+                    <option value="">Selecciona un artista</option>
+                    {% for artist in artistas %}
+                    <option value="{{ artist.artist_id }}" {% if artist.artist_id == canciones.artist_id %}selected{% endif %}>{{ artist.artist_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="track_title" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">
+                    Nombre de la Cancion *
+                </label>
+                <input type="text" id="track_title" name="track_title" value="{{ canciones.track_title }}" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="album_id" style="display: block; margin-bottom: 0.5rem;">
+                    Album (opcional)
+                </label>
+                <select id="album_id" name="album_id"
+                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+                    <option value="">Sin Album</option>
+                    {% for album in albumes %}
+                    <option value="{{ album.album_id }}" {% if album.album_id == canciones.album_id %}selected{% endif %}>{{ album.album_title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="track_number" style="display: block; margin-bottom: 0.5rem;">
+                    Numero de Pista (opcional)
+                </label>
+                <input type="number" id="track_number" name="track_number" min="1"
+                       value="{{ canciones.track_number or '' }}"
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+                <small style="color: var(--spotify-light-gray); display: block; margin-top: 0.25rem;">
+                    Deja vacio si no quieres asignar un numero especifico
+                </small>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="duration_seconds" style="display: block; margin-bottom: 0.5rem;">
+                    Duracion (segundos)
+                </label>
+                <input type="number" id="duration_seconds" name="duration_seconds" min="0"
+                       value="{{ canciones.duration_seconds or '' }}"
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--spotify-green); background: var(--spotify-darker); color: white; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            
+            <button type="submit" class="btn" style="width: 100%; padding: 0.75rem; background-color: var(--spotify-green); color: white; border: none; border-radius: 4px; font-weight: bold;">
+                Guardar Cambios
+            </button>
+        </form>
+        
+        <a href="{{ url_for('admin_tracks_list') }}" style="display: inline-block; margin-top: 1rem; color: var(--spotify-light-gray); text-decoration: none;">
+            ← Volver a la lista
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Administrador - Music Ratings{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Panel de Administrador</h1>
+        <p>Gestiona artistas, albumes y canciones</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="card" style="margin: 2rem auto; max-width: 700px;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Opciones de Administracion</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <h3 style="margin-top: 1rem; text-align: center;">Artistas</h3>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="{{ url_for('add_artist') }}" class="btn btn-primary" style="flex: 1; color: white !important;">
+                    Agregar Artista
+                </a>
+                <a href="{{ url_for('admin_artists_list') }}" class="btn btn-secondary" style="flex: 1; color: white !important;">
+                    Gestionar Artistas
+                </a>
+            </div>
+            
+            <h3 style="margin-top: 1rem; text-align: center;">Albumes</h3>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="{{ url_for('add_album') }}" class="btn btn-primary" style="flex: 1; color: white !important;">
+                    Agregar Album
+                </a>
+                <a href="{{ url_for('admin_albums_list') }}" class="btn btn-secondary" style="flex: 1; color: white !important;">
+                    Gestionar Albumes
+                </a>
+            </div>
+            
+            <h3 style="margin-top: 1rem; text-align: center;">Canciones</h3>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="{{ url_for('add_track') }}" class="btn btn-primary" style="flex: 1; color: white !important;">
+                    Agregar Cancion
+                </a>
+                <a href="{{ url_for('admin_tracks_list') }}" class="btn btn-secondary" style="flex: 1; color: white !important;">
+                    Gestionar Canciones
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
