@@ -19,9 +19,14 @@ class MongoDB:
                 if hasattr(self.config, 'get'):
                     return self.config.get(name, default)
                 return getattr(self.config, name, default)
+            
             uri = cfg_get('MONGO_URI')
             max_pool = int(cfg_get('MONGO_MAX_POOL_SIZE', 10))
             min_pool = int(cfg_get('MONGO_MIN_POOL_SIZE', 2))
+            host = cfg_get('MONGO_HOST', 'localhost')
+            port = cfg_get('MONGO_PORT', '27017')
+            dbname = cfg_get('MONGO_DB', 'music_reviews')
+            
             self.client = MongoClient(
                 uri,
                 maxPoolSize=max_pool,
@@ -29,17 +34,29 @@ class MongoDB:
                 serverSelectionTimeoutMS=5000
             )
             self.client.admin.command('ping')
-            self.db = self.client[cfg_get('MONGO_DB', 'music_reviews')]
-            host = cfg_get('MONGO_HOST', 'localhost')
-            port = cfg_get('MONGO_PORT', '27017')
-            dbname = cfg_get('MONGO_DB', 'music_reviews')
+            self.db = self.client[dbname]
             logger.info(f"MongoDB connected: {host}:{port}/{dbname}")
         except ConnectionFailure as e:
-            logger.error(f"MongoDB connection failed: {e}")
-            raise
+            error_msg = (
+                f"\n❌ ERROR: No se puede conectar a MongoDB\n"
+                f"   Host: {cfg_get('MONGO_HOST', 'localhost')}\n"
+                f"   Puerto: {cfg_get('MONGO_PORT', '27017')}\n"
+                f"   Base de datos: {cfg_get('MONGO_DB', 'music_reviews')}\n\n"
+                f"   Asegúrate de que:\n"
+                f"   1. MongoDB está corriendo\n"
+                f"   2. El usuario está creado correctamente\n"
+                f"   3. Las credenciales en config.py o .env son correctas\n\n"
+                f"   Detalles del error: {e}"
+            )
+            logger.error(error_msg)
+            raise RuntimeError(error_msg) from e
         except Exception as e:
-            logger.error(f"Error connecting to MongoDB: {e}")
-            raise
+            error_msg = (
+                f"\n❌ ERROR inesperado conectando a MongoDB: {e}\n"
+                f"   Ejecuta 'python setup_databases.py' para inicializar las bases de datos"
+            )
+            logger.error(error_msg)
+            raise RuntimeError(error_msg) from e
     @contextmanager
     def start_session(self):
         """Start a MongoDB session for transactions"""

@@ -23,19 +23,41 @@ class PostgresDB:
             host = cfg_get('POSTGRES_HOST', 'localhost')
             port = cfg_get('POSTGRES_PORT', '5432')
             db_name = cfg_get('POSTGRES_DB', 'music_reviews')
+            username = cfg_get('POSTGRES_USER', 'app_user')
+            password = cfg_get('POSTGRES_PASSWORD', '123')
+            
             self.connection_pool = psycopg2.pool.ThreadedConnectionPool(
                 min_conn,
                 max_conn,
                 host=host,
                 port=port,
                 database=db_name,
-                user=cfg_get('POSTGRES_USER', 'app_user'),
-                password=cfg_get('POSTGRES_PASSWORD', '123')
+                user=username,
+                password=password
             )
             logger.info(f"PostgreSQL connection pool created: {host}:{port}/{db_name}")
+        except psycopg2.OperationalError as e:
+            error_msg = (
+                f"\n❌ ERROR: No se puede conectar a PostgreSQL\n"
+                f"   Host: {cfg_get('POSTGRES_HOST', 'localhost')}\n"
+                f"   Puerto: {cfg_get('POSTGRES_PORT', '5432')}\n"
+                f"   Base de datos: {cfg_get('POSTGRES_DB', 'music_reviews')}\n"
+                f"   Usuario: {cfg_get('POSTGRES_USER', 'app_user')}\n\n"
+                f"   Asegúrate de que:\n"
+                f"   1. PostgreSQL está corriendo\n"
+                f"   2. La base de datos '{db_name}' existe\n"
+                f"   3. Las credenciales en config.py o .env son correctas\n\n"
+                f"   Detalles del error: {e}"
+            )
+            logger.error(error_msg)
+            raise RuntimeError(error_msg) from e
         except Exception as e:
-            logger.error(f"Error creating PostgreSQL connection pool: {e}")
-            raise
+            error_msg = (
+                f"\n❌ ERROR inesperado conectando a PostgreSQL: {e}\n"
+                f"   Ejecuta 'python setup_databases.py' para inicializar las bases de datos"
+            )
+            logger.error(error_msg)
+            raise RuntimeError(error_msg) from e
     @contextmanager
     def get_connection(self):
         """Get connection from pool with context manager"""
